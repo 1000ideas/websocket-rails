@@ -1,7 +1,7 @@
 ###
  HTTP Interface for the WebSocketRails client.
 ###
-class WebSocketRails.HttpConnection extends WebSocketRails.AbstractConnection
+class window.WebSocketRails.HttpConnection extends window.WebSocketRails.AbstractConnection
   connection_type: 'http'
 
   _httpFactories: -> [

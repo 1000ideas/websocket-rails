@@ -19,7 +19,7 @@ Listening for new events from the server
 Stop listening for new events from the server
   dispatcher.unbind('event')
 ###
-class @WebSocketRails
+class window.WebSocketRails
   constructor: (@url, @use_websockets = true) ->
     @callbacks = {}
     @channels  = {}
@@ -31,9 +31,9 @@ class @WebSocketRails
     @state = 'connecting'
 
     unless @supports_websockets() and @use_websockets
-      @_conn = new WebSocketRails.HttpConnection @url, @
+      @_conn = new window.WebSocketRails.HttpConnection @url, @
     else
-      @_conn = new WebSocketRails.WebSocketConnection @url, @
+      @_conn = new window.WebSocketRails.WebSocketConnection @url, @
 
     @_conn.new_message = @new_message
 
@@ -45,9 +45,9 @@ class @WebSocketRails
 
     @state     = 'disconnected'
 
-  # Reconnects the whole connection, 
+  # Reconnects the whole connection,
   # keeping the messages queue and its' connected channels.
-  # 
+  #
   # After successfull connection, this will:
   # - reconnect to all channels, that were active while disconnecting
   # - resend all events from which we haven't received any response yet
@@ -66,7 +66,7 @@ class @WebSocketRails
 
   new_message: (data) =>
     for socket_message in data
-      event = new WebSocketRails.Event( socket_message )
+      event = new window.WebSocketRails.Event( socket_message )
       if event.is_result()
         @queue[event.id]?.run_callbacks(event.success, event.data)
         delete @queue[event.id]
@@ -95,7 +95,7 @@ class @WebSocketRails
     delete @callbacks[event_name]
 
   trigger: (event_name, data, success_callback, failure_callback) =>
-    event = new WebSocketRails.Event( [event_name, data, @_conn?.connection_id], success_callback, failure_callback )
+    event = new window.WebSocketRails.Event( [event_name, data, @_conn?.connection_id], success_callback, failure_callback )
     @trigger_event event
 
   trigger_event: (event) =>
@@ -110,7 +110,7 @@ class @WebSocketRails
 
   subscribe: (channel_name, success_callback, failure_callback) =>
     unless @channels[channel_name]?
-      channel = new WebSocketRails.Channel channel_name, @, false, success_callback, failure_callback
+      channel = new window.WebSocketRails.Channel channel_name, @, false, success_callback, failure_callback
       @channels[channel_name] = channel
       channel
     else
@@ -118,7 +118,7 @@ class @WebSocketRails
 
   subscribe_private: (channel_name, success_callback, failure_callback) =>
     unless @channels[channel_name]?
-      channel = new WebSocketRails.Channel channel_name, @, true, success_callback, failure_callback
+      channel = new window.WebSocketRails.Channel channel_name, @, true, success_callback, failure_callback
       @channels[channel_name] = channel
       channel
     else
@@ -137,7 +137,7 @@ class @WebSocketRails
     (typeof(WebSocket) == "function" or typeof(WebSocket) == "object")
 
   pong: =>
-    pong = new WebSocketRails.Event( ['websocket_rails.pong', {}, @_conn?.connection_id] )
+    pong = new window.WebSocketRails.Event( ['websocket_rails.pong', {}, @_conn?.connection_id] )
     @_conn.trigger pong
 
   connection_stale: =>

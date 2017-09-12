@@ -10,7 +10,7 @@ For instance:
 If you want to unbind an event, you can use the unbind function :
   awesome_channel.unbind('event')
 ###
-class WebSocketRails.Channel
+class window.WebSocketRails.Channel
 
   constructor: (@name, @_dispatcher, @is_private = false, @on_success, @on_failure) ->
     @_callbacks = {}
@@ -22,13 +22,13 @@ class WebSocketRails.Channel
       event_name = 'websocket_rails.subscribe'
 
     @connection_id = @_dispatcher._conn?.connection_id
-    event = new WebSocketRails.Event( [event_name, {data: {channel: @name}}, @connection_id], @_success_launcher, @_failure_launcher)
+    event = new window.WebSocketRails.Event( [event_name, {data: {channel: @name}}, @connection_id], @_success_launcher, @_failure_launcher)
     @_dispatcher.trigger_event event
 
   destroy: ->
     if @connection_id == @_dispatcher._conn?.connection_id
       event_name = 'websocket_rails.unsubscribe'
-      event =  new WebSocketRails.Event( [event_name, {data: {channel: @name}}, @connection_id] )
+      event =  new window.WebSocketRails.Event( [event_name, {data: {channel: @name}}, @connection_id] )
       @_dispatcher.trigger_event event
     @_callbacks = {}
 
@@ -40,7 +40,7 @@ class WebSocketRails.Channel
     delete @_callbacks[event_name]
 
   trigger: (event_name, message) ->
-    event = new WebSocketRails.Event( [event_name, {channel: @name, data: message, token: @_token}, @connection_id] )
+    event = new window.WebSocketRails.Event( [event_name, {channel: @name, data: message, token: @_token}, @connection_id] )
     if !@_token
       @_queue.push event
     else

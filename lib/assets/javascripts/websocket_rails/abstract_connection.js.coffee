@@ -1,7 +1,7 @@
 ###
  Abstract Interface for the WebSocketRails client.
 ###
-class WebSocketRails.AbstractConnection
+class window.WebSocketRails.AbstractConnection
 
   constructor: (url, @dispatcher) ->
     @message_queue   = []
@@ -20,16 +20,16 @@ class WebSocketRails.AbstractConnection
     event.connection_id = @connection_id if @connection_id?
 
     # ...
-    
+
   on_close: (event) ->
     if @dispatcher && @dispatcher._conn == @
-      close_event = new WebSocketRails.Event(['connection_closed', event])
+      close_event = new window.WebSocketRails.Event(['connection_closed', event])
       @dispatcher.state = 'disconnected'
       @dispatcher.dispatch close_event
 
   on_error: (event) ->
     if @dispatcher && @dispatcher._conn == @
-      error_event = new WebSocketRails.Event(['connection_error', event])
+      error_event = new window.WebSocketRails.Event(['connection_error', event])
       @dispatcher.state = 'disconnected'
       @dispatcher.dispatch error_event
 

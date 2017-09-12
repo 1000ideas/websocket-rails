@@ -2,7 +2,7 @@
 The Event object stores all the relevant event information.
 ###
 
-class WebSocketRails.Event
+class window.WebSocketRails.Event
 
   constructor: (data, @success_callback, @failure_callback) ->
     @name    = data[0]
